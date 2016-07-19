@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A very simple relay client</title>
+</head>
+<body>
+    <div id="msgArea">
+        <div><textarea id="msgText" style="width: 90%;" rows="30" readonly></textarea></div>
+        <div><input id="outText" placeholder="Your message here..." size="100"/></div>
+        <div><input id="inChannel" value="default" required/></div>
+        <div><input id="outChannel" placeholder="Optional output channel, will use input channel by default"/></div>
+        <div>
+            <button id="msgBtn" disabled onclick="sendMessage()">Send</button>
+            <button onclick="connect()">Connect</button>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            ws = new WebSocket("ws://" + window.location.host + "/relay");
+            ws.onmessage = function(event) {
+                let msg = event.data;
+                console.log(msg);
+                document.getElementById("msgText").value += "incoming---->" + msg + '\n';
+            };
+            sendMessage = function() {
+                ws.send(document.getElementById("outText").value);
+                document.getElementById("msgText").value += "    you----->" + document.getElementById("outText").value + '\n';
+                document.getElementById("outText").value = "";
+            }
+            connect = function() {
+                let msg = "hook:" + document.getElementById("inChannel").value;
+                let outCh = document.getElementById("outChannel").value;
+                if (outCh.length > 0) {
+                    msg += "|" + outCh;
+                }
+                ws.send(msg);
+                document.getElementById("msgBtn").disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
