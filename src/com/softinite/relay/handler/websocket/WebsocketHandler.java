@@ -7,10 +7,8 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
+ * Responsible for handling websocket connections
  * Created by Sergiu Ivasenco on 16/07/16.
  */
 public class WebsocketHandler implements Handler<ServerWebSocket> {
@@ -27,9 +25,7 @@ public class WebsocketHandler implements Handler<ServerWebSocket> {
     public void handle(ServerWebSocket serverWebSocket) {
         final ChannelsInfo channelsInfo = new ChannelsInfo(serverWebSocket.textHandlerID());
         LOGGER.info("Opening websocket " + channelsInfo.getId());
-        channelsInfo.setInputMessageHandler(message -> {
-            serverWebSocket.writeFinalTextFrame(message);
-        });
+        channelsInfo.setInputMessageHandler(serverWebSocket::writeFinalTextFrame);
         serverWebSocket.frameHandler(new FrameHandler(vertx, channelsInfo));
         serverWebSocket.exceptionHandler(exception -> {
             LOGGER.error("Websocket closed with exception.", exception);
