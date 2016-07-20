@@ -28,7 +28,7 @@ public class WebsocketHandler implements Handler<ServerWebSocket> {
         channelsInfo.setInputMessageHandler(serverWebSocket::writeFinalTextFrame);
         serverWebSocket.frameHandler(new FrameHandler(vertx, channelsInfo));
         serverWebSocket.exceptionHandler(exception -> {
-            LOGGER.error("Websocket closed with exception.", exception);
+            LOGGER.error("Websocket " + channelsInfo.getId() + " closed with exception.", exception);
             closeInputChannel(channelsInfo);
         });
         serverWebSocket.closeHandler(close -> {

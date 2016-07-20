@@ -6,14 +6,14 @@
 </head>
 <body>
     <div id="msgArea">
-        <div><textarea id="msgText" style="width: 90%;" rows="30" readonly></textarea></div>
+        <div><textarea id="msgText" style="width: 90%;padding: 20 20 20 10;" rows="30" readonly></textarea></div>
         <div><input id="outText" placeholder="Your message here..." size="100"/></div>
         <div><input id="inChannel" value="default" required/></div>
-        <div><input id="outChannel" placeholder="Optional output channel, will use input channel by default"/></div>
         <div>
-            <button id="msgBtn" disabled onclick="sendMessage()">Send</button>
+            <input id="outChannel" placeholder="Optional output channel, will use input channel by default"/>
             <button onclick="connect()">Connect</button>
         </div>
+        <div><button id="msgBtn" disabled onclick="sendMessage()">Send</button></div>
     </div>
     <script>
         window.onload = function() {
